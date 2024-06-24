@@ -1,0 +1,5 @@
+= oEMS OEM Edge Bundle 
+
+This is the opernikus oEMS OEM edge implementation. 
+
+https://github.com/OpenEMS/openems/tree/develop/io.openems.oems.oem.edge[Source Code icon:github[]]

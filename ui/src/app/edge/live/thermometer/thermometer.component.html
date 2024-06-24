@@ -1,0 +1,12 @@
+<ng-container *ngIf="isInitialized && sensors.length > 1">
+    <oe-flat-widget img="assets/img/thermometer.png" [title]="'General.temperature' | translate">
+        <ng-container *ngFor="let sensor of sensors, let i = index">
+            <!-- Show Alias if there are more than one Thermometer -->
+            <ng-container>
+                <oe-flat-widget-line [name]="sensor.alias" [channelAddress]="sensor.id + '/Temperature'"
+                    [converter]="CONVERT_TO_DEGREE">
+                </oe-flat-widget-line>
+            </ng-container>
+        </ng-container>
+    </oe-flat-widget>
+</ng-container>

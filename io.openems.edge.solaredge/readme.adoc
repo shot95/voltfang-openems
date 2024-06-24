@@ -1,0 +1,23 @@
+= SolarEdge PV Inverter + Grid-Meter
+
+Implementation of the SolarEdge PV inverters.
+
+Implemented Natures:
+- ElectricityMeter
+
+== Compatibility
+* SolarEdge SE33.3k
+
+== Application Notes
+
+Activating the OpenEMS option dynamicRuntimeScalefactors() delays all SolarEdge channel values by approx. 2 core cycle time.
+
+
+=== Configuration
+Be careful! Solar edge SE33.3k uses dynamic runtime scalefactors. Be sure that you enable
+dynamicRuntimeScalefactors() within OpenEMS configuration.
+
+=== Maturity
+Production State: *-pilot projects-*
+
+https://github.com/OpenEMS/openems/tree/develop/io.openems.edge.solaredge[Source Code icon:github[]]

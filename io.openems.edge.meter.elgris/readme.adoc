@@ -1,0 +1,20 @@
+= Meter Elgris
+
+Implementation of the Elgris Zero Export and Elgris Smart Meter
+
+Note:: Elgris firmware version must be at least 1.15.02 
+
+Implemented Natures:
+- ElectricityMeter
+
+ 
+== Code Quality
+ 
+Production State: *pilot projects* 
+
+Development State: -
+
+
+
+
+https://github.com/OpenEMS/openems/tree/develop/io.openems.edge.meter.elgris[Source Code icon:github[]]

@@ -1,0 +1,32 @@
+= Microcare SDM 630 Meter
+
+This implementation is functionally compatible with a number of energy meters with the name "SDM 630" and other whitelabel products.
+
+== Implemented Natures
+
+* ElectricityMeter
+
+== Compatibility
+
+* Microcare SDM 630
+* Eastron SDM 630
+* Controlin SDK-005
+* Controlin SDK-103
+* Controlin SDK-100
+
+
+== Application Notes
+=== Configuration
+
+Default Modbus Unit ID: 1
+
+Modbus Parameter: 9600/8/N/1 or 19200/8/N/1
+
+If there are 10 such meters on one Modbus RTU bridge, the communication will be very slow. In this case, activate
+the meter with `config.reducedReading()=true`. Only the most relevant registers will be read out then to save time.
+
+=== Maturity
+Production State: *-pilot projects-*
+
+
+https://github.com/OpenEMS/openems/tree/develop/io.openems.edge.meter.microcare.sdm630[Source Code icon:github[]]

@@ -1,0 +1,29 @@
+= SMA ESS 
+
+== SMA SunnyIsland 6.0H and Sunny Island 4.4M
+
+Implementation of the one phase Suny Island io.openems.edge.ess.sma.stpxx3se.battery inverter.
+
+
+== SMA Sunny Tripower XX Smart Energy hybrid inverter and ESS 
+
+This is the implementation of the Sunny Tripower STP XX SE hybrid inverter. 
+
+The following bundles communicate directly with the STP:
+
+* `ESS SMA Sunny Tripower XX SE` as energy storage system (Modbus Unit-ID: unitId +123)
+* `ESS SMA Sunny Tripower XX SE Battery` provides battery information for the ESS
+* `ESS SMA Sunny Tripower XX SE DC Charger` as pv inverter (Modbus Unit-ID: unitId (default:3)
+* `SMA Sunny Home Manager` as grid meter as pv inverter (Modbus Unit-ID: unitId (default:3)
+
+
+
+
+
+=== Hints
+ 
+* we probably need to increase the Modbus Invalidation Counter to 3 or 5?
+
+
+
+https://github.com/OpenEMS/openems/tree/develop/io.openems.edge.ess.sma[Source Code icon:github[]]

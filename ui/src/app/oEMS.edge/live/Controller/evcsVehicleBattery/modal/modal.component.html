@@ -1,0 +1,198 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>{{ component.alias }}</ion-title>
+        <ion-buttons slot="end">
+            <!-- <ion-button target="_blank"
+                href="https://docs.fenecon.de/{{service.getDocsLang()}}/_/latest/fems/fems-app/bhkw.html">
+                <ion-icon name="help-circle-outline"></ion-icon>
+            </ion-button> -->
+            <ion-button (click)="modalCtrl.dismiss()">
+                <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+    <ng-container>
+        <ion-card-content class="underline">
+            <table class="full_width">
+                <tr>
+                    <td translate>
+                        General.mode
+                    </td>
+                </tr>
+            </table>
+            <!-- ngIf prevents ionChange to trigger on init -->
+            <ion-segment *ngIf="component" (ionChange)="updateMode($event)" value="{{ component.properties['mode'] }}"
+                scrollable="false">
+                <ion-segment-button value="AUTOMATIC">
+                    <ion-label translate>
+                        Edge.Index.oEMS.Widgets.evcsVehicleBattery.mode.AUTOMATIC
+                    </ion-label>
+                    <ion-icon style="width:40px" name="shuffle-outline">
+                    </ion-icon>
+                </ion-segment-button>
+                <ion-segment-button value="CHARGE">
+                    <ion-label translate>
+                        Edge.Index.oEMS.Widgets.evcsVehicleBattery.mode.CHARGE
+                    </ion-label>
+                    <ion-icon style="width:40px" name="car-outline"></ion-icon>
+                </ion-segment-button>
+                <ion-segment-button value="DISCHARGE">
+                    <ion-label translate>
+                        Edge.Index.oEMS.Widgets.evcsVehicleBattery.mode.DISCHARGE
+                    </ion-label>
+                    <ion-icon style="width:40px" name="battery-half-outline"></ion-icon>
+                </ion-segment-button>
+                <ion-segment-button value="OFF">
+                    <ion-label translate>
+                        Edge.Index.oEMS.Widgets.evcsVehicleBattery.mode.OFF
+                    </ion-label>
+                    <ion-icon name="power-outline" style="width: 40px"></ion-icon>
+                </ion-segment-button>
+            </ion-segment>
+        </ion-card-content>
+
+        <ng-container *ngIf="(edge.currentData | async)['channel'] as currentData">
+            <ion-card-content class="underline">
+                <table class="full_width">
+                    <tr>
+                        <td style="width: 65%" translate>
+                            Edge.Index.oEMS.Widgets.evcsVehicleBattery.soc
+                        </td>
+                        <td style="width: 35%" class="align_right">
+                            {{ currentData[evcs.id + '/Soc'] | unitvalue:'%' }}
+                        </td>
+                    </tr>
+                </table>
+            </ion-card-content>
+        </ng-container>
+        <!-- AUTOMATIC: minVehicleSoc / maxVehicleSoc -->
+        <ng-container *ngIf="component.properties['mode'] === 'AUTOMATIC'">
+            <ion-card-content>
+                <table class="full_width">
+                    <tr>
+                        <td style="width: 65%" translate>
+                            Edge.Index.oEMS.Widgets.evcsVehicleBattery.dischargeUntil
+                        </td>
+                        <td style="width: 35%" class="align_right">
+                            {{ component.properties['minVehicleSoc'] | unitvalue:'%' }}
+                        </td>
+                    </tr>
+                    <div style="padding-top: 5px;"></div>
+                    <tr>
+                        <td style="width: 65%" translate>
+                            Edge.Index.oEMS.Widgets.evcsVehicleBattery.chargeUntil
+                        </td>
+                        <td style="width: 35%" class="align_right">
+                            {{ component.properties['maxVehicleSoc'] | unitvalue:'%' }}
+                        </td>
+                    </tr>
+                </table>
+                <table class="full_width" *ngIf="edge.roleIsAtLeast('owner')">
+                    <tr>
+                        <ion-range (ionChange)="updateThresholds()" dual-knobs pin color="dark" min="0" max="100"
+                            [(ngModel)]="thresholds" debounce="500">
+                            <ion-label slot="start">
+                                {{ 0 | unitvalue:'%' }}
+                            </ion-label>
+                            <ion-label slot="end">
+                                {{ 100 | unitvalue:'%' }}
+                            </ion-label>
+                        </ion-range>
+                    </tr>
+                </table>
+            </ion-card-content>
+        </ng-container>
+        <!-- CHARGE: minEssSoc (read-only) -->
+        <ng-container *ngIf="component.properties['mode'] === 'CHARGE'">
+            <ion-card-content>
+                <table class="full_width">
+                    <tr>
+                        <td style="width: 65%" translate>
+                            Edge.Index.oEMS.Widgets.evcsVehicleBattery.chargeEssThreshold
+                        </td>
+                        <td style="width: 35%" class="align_right">
+                            {{ component.properties['minEssSoc'] | unitvalue:'%' }}
+                        </td>
+                    </tr>
+                </table>
+            </ion-card-content>
+        </ng-container>
+        <!-- DISCHARGE: maxEssSoc (read-only) -->
+        <ng-container *ngIf="component.properties['mode'] === 'DISCHARGE'">
+            <ion-card-content class="underline">
+                <table class="full_width">
+                    <tr>
+                        <td style="width: 65%" translate>
+                            Edge.Index.oEMS.Widgets.evcsVehicleBattery.dischargeEssThreshold
+                        </td>
+                        <td style="width: 35%" class="align_right">
+                            {{ component.properties['maxEssSoc'] | unitvalue:'%' }}
+                        </td>
+                    </tr>
+                </table>
+            </ion-card-content>
+        </ng-container>
+        <!-- DISCHARGE: dischargePower -->
+        <ng-container *ngIf="component.properties['mode'] === 'DISCHARGE'">
+            <ion-card-content class="underline">
+                <table class="full_width">
+                    <tr>
+                        <td style="width: 65%" translate>
+                            Edge.Index.oEMS.Widgets.evcsVehicleBattery.dischargePower
+                        </td>
+                        <td style="width: 35%" class="align_right">
+                            {{ component.properties['dischargePower'] | unitvalue:'W' }}
+                        </td>
+                    </tr>
+                </table>
+                <table class="full_width" *ngIf="edge.roleIsAtLeast('owner')">
+                    <tr>
+                        <ion-range (ionChange)="updateDischargePower($event)" pin color="dark" min="0"
+                            max="{{ component.properties['maxDischargePower'] }}"
+                            value="{{component.properties['dischargePower']}}" step="100" debounce="500">
+                            <ion-label slot="start">
+                                {{ 0 | unitvalue:'W' }}
+                            </ion-label>
+                            <ion-label slot="end">
+                                {{ component.properties['maxDischargePower'] | unitvalue:'W' }}
+                            </ion-label>
+                        </ion-range>
+                    </tr>
+                </table>
+            </ion-card-content>
+        </ng-container>
+        <!-- DISCHARGE: minVehicleSoc -->
+        <ng-container *ngIf="component.properties['mode'] === 'DISCHARGE'">
+            <ion-card-content>
+                <table class="full_width">
+                    <tr>
+                        <td style="width: 65%" translate>
+                            Edge.Index.oEMS.Widgets.evcsVehicleBattery.dischargeUntil
+                        </td>
+                        <td style="width: 35%" class="align_right">
+                            {{ component.properties['minVehicleSoc'] | unitvalue:'%' }}
+                        </td>
+                    </tr>
+                </table>
+                <table class="full_width" *ngIf="edge.roleIsAtLeast('owner')">
+                    <tr>
+                        <ion-range (ionChange)="updateMinVehicleSoc($event)" pin color="dark" min="0" max="100"
+                            value="{{ component.properties['minVehicleSoc'] }}" debounce="500">
+                            <ion-label slot="start">
+                                {{ 0 | unitvalue:'%' }}
+                            </ion-label>
+                            <ion-label slot="end">
+                                {{ 100 | unitvalue:'%' }}
+                            </ion-label>
+                        </ion-range>
+                    </tr>
+                </table>
+            </ion-card-content>
+        </ng-container>
+
+    </ng-container>
+</ion-content>

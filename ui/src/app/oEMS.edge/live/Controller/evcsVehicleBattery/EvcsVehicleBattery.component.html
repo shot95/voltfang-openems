@@ -1,0 +1,72 @@
+<oe-flat-widget button (click)="presentModal()" *ngIf="isInitialized" [title]="component.alias"
+    [icon]="{name: 'oe-evcs', color: 'environmental'}">
+
+    <oe-flat-widget-line [name]="'General.mode'| translate"
+        [value]="'Edge.Index.oEMS.Widgets.evcsVehicleBattery.mode.' + mode | translate"></oe-flat-widget-line>
+
+    <ng-container *ngIf="isConnectionSuccessful, else noConnection">
+        <!-- CHARGE -->
+        <ng-container *ngIf="this.mode === 'CHARGE'">
+            <oe-modal-horizontal-line></oe-modal-horizontal-line>
+            <oe-flat-widget-line [name]="'Edge.Index.Widgets.EVCS.status'| translate" [value]="evcsStatus"
+                leftColumnWidth="20"></oe-flat-widget-line>
+            <oe-flat-widget-line *ngIf="isEnergySinceBeginningAllowed"
+                [name]="'Edge.Index.Widgets.EVCS.energySinceBeginning' | translate"
+                [channelAddress]="evcsComponent.id + '/EnergySession'" [converter]="CONVERT_TO_KILO_WATTHOURS">
+            </oe-flat-widget-line>
+        </ng-container>
+
+        <!-- AUTOMATIC -->
+        <ng-container *ngIf="this.mode === 'AUTOMATIC' && false">
+            <oe-modal-horizontal-line></oe-modal-horizontal-line>
+            <oe-flat-widget-percentagebar>
+                <svg>
+                    <use href="#container"></use>
+                    <rect attr.x="{{ component.properties['minVehicleSoc'] }}%" y="2" rx="5" ry="5"
+                        attr.width="{{ component.properties['maxVehicleSoc'] - component.properties['minVehicleSoc'] }}%"
+                        height="16" ngClass="primary-color" />
+                    <text id="first"
+                        *ngIf="(component.properties['maxVehicleSoc'] - component.properties['minVehicleSoc']) > 15"
+                        attr.x="{{ component.properties['minVehicleSoc'] }}%" y="58%" dominant-baseline="middle"
+                        text-anchor="start" style="font-weight: 500" ngClass="secondary-color">{{
+                        component.properties['minVehicleSoc'] +
+                        " %" }}</text>
+                    <text id="second"
+                        *ngIf="(component.properties['maxVehicleSoc'] - component.properties['minVehicleSoc']) > 15"
+                        attr.x="{{ component.properties['maxVehicleSoc'] }}%" y="58%" dominant-baseline="middle"
+                        text-anchor="end" style="font-weight: 500;" ngClass="secondary-color">{{
+                        component.properties['maxVehicleSoc'] +
+                        " %" }}</text>
+                    <!-- Hint: Add 1 to evcsSoc to show blue bar also in case of SoC == 0 -->
+                    <rect *ngIf="(evcsSoc + 1) as value" y="2" rx="5" ry="5" [attr.x]="(value - 1) + '%'" width="1%"
+                        height="16" style="fill:blue" />
+                </svg>
+            </oe-flat-widget-percentagebar>
+        </ng-container>
+
+        <!-- DISCHARGE -->
+        <ng-container *ngIf="this.isDischarging , else charge">
+            <oe-modal-horizontal-line></oe-modal-horizontal-line>
+            <oe-flat-widget-line [name]="'General.dischargePower' | translate"
+                [channelAddress]="evcsComponent.id + '/ActivePower'" [converter]="convertDischargePower">
+            </oe-flat-widget-line>
+        </ng-container>
+
+        <!-- Charge -->
+        <ng-template #charge>
+            <oe-flat-widget-line
+                [name]="'Edge.Index.oEMS.Widgets.evcsVehicleBattery.soc'| translate"></oe-flat-widget-line>
+            <oe-flat-widget-percentagebar [channelAddress]="evcsComponent.id + '/Soc'"></oe-flat-widget-percentagebar>
+            <oe-flat-widget-line [name]="'General.chargePower' | translate"
+                [channelAddress]="evcsComponent.id + '/ChargePower'" [converter]="convertDischargePower">
+            </oe-flat-widget-line>
+        </ng-template>
+    </ng-container>
+
+    <ng-template #noConnection>
+        <oe-modal-horizontal-line></oe-modal-horizontal-line>
+        <oe-flat-widget-line leftColumnWidth="100"
+            [name]="'Edge.Index.Widgets.EVCS.NoConnection.description' | translate">
+        </oe-flat-widget-line>
+    </ng-template>
+</oe-flat-widget>

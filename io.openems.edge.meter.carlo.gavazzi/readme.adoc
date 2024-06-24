@@ -1,0 +1,11 @@
+= Carlo Gavazzi EM-xxx Meter
+
+Applies to::
+- Carlo Gavazzi EM24
+- Carlo Gavazzi EM330
+- Carlo Gavazzi EM340
+
+Implemented Natures:
+- ElectricityMeter
+
+https://github.com/OpenEMS/openems/tree/develop/io.openems.edge.meter.carlo.gavazzi[Source Code icon:github[]]

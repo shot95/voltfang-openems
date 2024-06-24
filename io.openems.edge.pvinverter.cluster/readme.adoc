@@ -1,0 +1,17 @@
+= PV-Inverter Cluster
+
+Combines multiple PV-Inverters to one common PV-Inverter. This way every Controller can easily work with multiple PV-Inverters in parallel.
+
+If masterMode() is false, the specified power is distributed evenly across all PV inverters.
+It is possible to operate PV inverters with different maximum output power.
+If the average power to be distributed is greater than the maximum power of a "small"
+PV inverter, the more powerful neighbor takes over the missing differential power.
+When masterMode() is activated, the power to distribute is passed to one configured master.
+
+
+## Implementation details
+
+TODO switch to OSGI Component
+
+
+https://github.com/OpenEMS/openems/tree/develop/io.openems.edge.pvinverter.cluster[Source Code icon:github[]]

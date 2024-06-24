@@ -1,0 +1,17 @@
+= RRD4J 
+
+Persists data of OpenEMS Edge Channels to RRD4J files. Only channels with persistence priority at least
+as high as the configured persistence priority are stored. One file is created for each channel which 
+should be persisted. 
+
+The files are stored in the configured openems.data.dir of the openems-edge service. Cumulated channels
+(i.e. energy channels) are stored once every 60 minutes, while the others are stored once every 5 minutes.
+In Version 3, each file stores data of the last 450 days, resulting in disk usage of about 85kB
+for each cumulated channel and about 1MB for each other channel. As RRD4J is a round robin database,
+the size of the files is constant.
+
+For additional info on RRD4J see the documentation on https://www.openhab.org/addons/persistence/rrd4j/[openhab]
+and the https://github.com/rrd4j/rrd4j[github repository icon:github[]]
+
+
+https://github.com/OpenEMS/openems/tree/develop/io.openems.edge.timedata.rrd4j[Source Code icon:github[]]
